@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho Transacionável Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 Sistema de Vendas (Calculadora)</h1>
+
+        <section id="adicionar-item">
+            <h2>Adicionar Item</h2>
+            <select id="tipoVenda">
+                <option value="local">Venda Local (+5%)</option>
+                <option value="internacional">Venda Internacional (+25%)</option>
+            </select>
+            
+            <label for="valorBase">Digite o Valor do Produto (R$):</label> 
+            <input type="number" id="valorBase" placeholder="Ex: 150.00" min="0" value="0">
+            
+            <button onclick="adicionarItem()">Adicionar ao Carrinho</button>
+        </section>
+
+        <section id="carrinho-display">
+            <h2>Itens no Carrinho (<span id="contador-itens">0</span>)</h2>
+            <ul id="lista-itens">
+                </ul>
+        </section>
+
+        <section id="total-section">
+            <button class="total-button" onclick="calcularTotalGeral()">Calcular Total Bruto</button>
+            <div class="resultado-box">
+                Valor Final: <span id="totalGeral">R$ 0,00</span>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

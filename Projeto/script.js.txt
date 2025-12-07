@@ -1,0 +1,104 @@
+let carrinho = [];
+
+const TAXA_LOCAL = 0.05; // 5%
+const TAXA_INTERNACIONAL = 0.25; // 25%
+
+/**
+ * Simula a interface Transacionavel e as classes VendaLocal/VendaInternacional
+ * @param {string} tipo - 'local' ou 'internacional'
+ * @param {number} valorBase 
+ * @returns {object} Um objeto com o valor final calculado
+ */
+function Venda(tipo, valorBase) {
+    let valorFinal = 0;
+    
+   
+    if (tipo === 'local') {
+        valorFinal = valorBase * (1 + TAXA_LOCAL);
+    } else if (tipo === 'internacional') {
+        valorFinal = valorBase * (1 + TAXA_INTERNACIONAL);
+    }
+    
+    
+    return {
+        tipo: tipo,
+        valorBase: valorBase,
+        valorFinal: valorFinal 
+    };
+}
+
+function adicionarItem() {
+    const tipo = document.getElementById('tipoVenda').value;
+    const valorBaseInput = document.getElementById('valorBase'); 
+    const valorBase = parseFloat(valorBaseInput.value);
+
+    if (isNaN(valorBase) || valorBase <= 0) {
+        alert("Por favor, insira um valor base válido (maior que zero).");
+        return;
+    }
+
+   
+    const novoItem = Venda(tipo, valorBase);
+    carrinho.push(novoItem);
+
+    
+    valorBaseInput.value = '0'; 
+
+    atualizarDisplay();
+    calcularTotalGeral(); 
+}
+
+/**
+ * Remove um item do carrinho pelo seu índice e atualiza o display.
+ * @param {number} index - O índice do item a ser removido no array carrinho.
+ */
+function removerItem(index) {
+    if (index >= 0 && index < carrinho.length) {
+        carrinho.splice(index, 1); 
+        atualizarDisplay();
+        calcularTotalGeral(); 
+    }
+}
+
+
+function atualizarDisplay() {
+    const lista = document.getElementById('lista-itens');
+    lista.innerHTML = ''; 
+    let contador = 0;
+
+    carrinho.forEach((item, index) => { 
+        const li = document.createElement('li');
+        const tipoFormatado = item.tipo === 'local' ? 'Venda Local' : 'Venda Internacional';
+        
+        li.innerHTML = `
+            <div>
+                <strong>${tipoFormatado}</strong> 
+                (Base: R$ ${item.valorBase.toFixed(2).replace('.', ',')}) 
+                &rarr; Final: R$ ${item.valorFinal.toFixed(2).replace('.', ',')}
+            </div>
+            <button class="remove-btn" onclick="removerItem(${index})">Remover</button>
+        `;
+        lista.appendChild(li);
+        contador++;
+    });
+
+    document.getElementById('contador-itens').textContent = contador;
+}
+
+
+function calcularTotalGeral(){
+    let totalGeral = 0.0;
+
+    carrinho.forEach(item => {
+        totalGeral += item.valorFinal;
+    });
+
+    const totalFormatado = totalGeral.toFixed(2).replace('.', ',');
+    document.getElementById('totalGeral').textContent = `R$ ${totalFormatado}`;
+
+    if (carrinho.length === 0) {
+        document.getElementById('totalGeral').textContent = "R$ 0,00";
+    }
+}
+
+calcularTotalGeral();
